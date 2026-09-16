@@ -93,6 +93,7 @@ button { cursor: pointer; touch-action: manipulation; }
   height: 34px;
   line-height: 25px;
 }
+.bag-button svg { width: 24px; height: 24px; }
 
 .cart-count {
   position: absolute;
@@ -863,6 +864,7 @@ button { cursor: pointer; touch-action: manipulation; }
 }
 
 .nav-item span { font-size: 22px; line-height: 22px; }
+.nav-item span svg { width: 22px; height: 22px; }
 .nav-item.selected { color: var(--plum); font-weight: 700; }
 
 /* ---------- Product modal ---------- */
@@ -1800,8 +1802,10 @@ button { cursor: pointer; touch-action: manipulation; }
 .amz-loc b { font-size: 13px; line-height: 15px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .amz-pin { font-size: 20px; line-height: 18px; color: #f5a623; }
+.amz-pin svg { width: 18px; height: 18px; }
 
 .amz-strip .amz-bag { color: #fff; font-size: 27px; }
+.amz-strip .amz-bag svg { width: 26px; height: 26px; }
 
 .amz-search {
   display: flex;
