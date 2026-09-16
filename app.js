@@ -720,7 +720,7 @@ function placeOrder() {
 }
 
 document.addEventListener('click', event => {
-  if (event.target.closest('#supportTrigger')) { openSupportDrawer(); return; }
+  if (event.target.closest('#chatBubble')) { openSupportDrawer(); return; }
 
   if (event.target.closest('#closeDrawerBtn') || event.target.closest('#drawerBackdrop')) { closeSupportDrawer(); return; }
 
