@@ -2389,3 +2389,7 @@ button { cursor: pointer; touch-action: manipulation; }
 .location-sheet .field { margin-bottom: 12px; }
 .location-sheet .loc-estimate { font-size: 12px; color: #25763b; margin: 2px 0 12px; }
 .location-sheet .checkout { width: 100%; }
+
+.amz-search-icon svg { width: 17px; height: 17px; }
+.search-field span svg { display: block; }
+.wishlist-intro span svg { display: block; }
