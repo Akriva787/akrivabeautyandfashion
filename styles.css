@@ -1870,9 +1870,53 @@ button { cursor: pointer; touch-action: manipulation; }
 
 #home-screen.searching .amz-sublinks,
 #home-screen.searching .amz-section,
-#home-screen.searching .amz-banner {
+#home-screen.searching .amz-banner,
+#home-screen.searching .hero,
+#home-screen.searching .atelier,
+#home-screen.searching .activity-ticker {
   display: none;
 }
+
+/* ---------- Sale timer + activity ticker ---------- */
+.sale-timer {
+  display: inline-grid;
+  place-items: center;
+  margin-left: 7px;
+  background: linear-gradient(135deg, #ffd98a, #f5a623);
+  color: #2a0a1a;
+  font: 800 10px 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: 0.4px;
+  border-radius: 50px;
+  padding: 3px 9px;
+  vertical-align: middle;
+  box-shadow: 0 3px 8px -3px rgba(245, 166, 35, 0.8);
+}
+
+.activity-ticker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 16px 0;
+  padding: 9px 12px;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #fff 0%, #fbeef1 100%);
+  border: 1px solid #f2dfe4;
+  font-size: 11px;
+  color: #4a2033;
+  font-weight: 600;
+  min-height: 36px;
+}
+.ticker-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff0f3;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.ticker-text { transition: opacity 0.25s ease; }
 
 .amz-sublinks {
   display: flex;
@@ -2588,3 +2632,33 @@ html { scroll-behavior: smooth; }
   width: 28px;
   height: 28px;
 }
+
+/* ---------- Share + modal bought ---------- */
+.modal-share {
+  margin-left: auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid #e5dbe0;
+  background: #fff;
+  color: var(--plum);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.modal-share:active { transform: scale(0.94); }
+.modal-bought { font-size: 11.5px; font-weight: 700; color: #b33951; margin: 4px 0 8px; }
+
+.wishlist-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.wishlist-tools button[data-wish-share] {
+  border: 1.5px solid #e5dbe0;
+  background: #fff;
+  color: #3d3a3c;
+  border-radius: 50px;
+  padding: 10px 15px;
+  font: 700 12px 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+}
+.wishlist-tools button[data-wish-share]:active { transform: scale(0.97); }
+.wishlist-tools button[data-wish-all] { margin-right: 0; }

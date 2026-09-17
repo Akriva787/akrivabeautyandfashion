@@ -352,6 +352,8 @@ function openProduct(id) {
   document.getElementById('modal-name').textContent = selectedProduct.name;
   document.getElementById('modal-rating').innerHTML = `${starRating(selectedProduct.id)}<span class="modal-badge">${selectedProduct.badge ? `${selectedProduct.badge} · ` : ''}Akriva choice</span>`;
   document.getElementById('modal-price').innerHTML = `${money(selectedProduct.price)}${selectedProduct.old ? ` <del>${money(selectedProduct.old)}</del>` : ''}${selectedProduct.old ? ` <span class="pc-off">${pctOff(selectedProduct.old, selectedProduct.price)}% off</span>` : ''}`;
+  const bought = document.getElementById('modal-bought');
+  if (bought) bought.textContent = `🔥 ${2 + (selectedProduct.id * 3) % 9} people bought this today`;
   document.getElementById('product-modal').classList.remove('hidden');
 }
 
@@ -416,7 +418,7 @@ function renderWishlist() {
   const tools = document.getElementById('wishlist-tools');
   if (saved.length) {
     const total = saved.reduce((sum, p) => sum + p.price, 0);
-    tools.innerHTML = `<div class="wishlist-stats"><span>${saved.length} ${saved.length === 1 ? 'piece' : 'pieces'} loved</span><b>${money(total)}</b></div><button type="button" data-wish-all>Add all to bag →</button>`;
+    tools.innerHTML = `<div class="wishlist-stats"><span>${saved.length} ${saved.length === 1 ? 'piece' : 'pieces'} loved</span><b>${money(total)}</b></div><div class="wishlist-btns"><button type="button" data-wish-all>Add all to bag →</button><button type="button" data-wish-share>Share my pick</button></div>`;
   } else {
     tools.innerHTML = '';
   }
@@ -786,6 +788,78 @@ function placeOrder() {
   window.scrollTo(0, 0);
 }
 
+/* ---------- Flash sale timer ---------- */
+const SALE_MS = 5 * 60 * 60 * 1000 + 30 * 60 * 1000;
+const pad2 = n => String(n).padStart(2, '0');
+
+function saleEndTime() {
+  let end = Number(localStorage.getItem('akriva_sale_end'));
+  const now = Date.now();
+  if (!end || end <= now) {
+    end = now + SALE_MS;
+    localStorage.setItem('akriva_sale_end', end);
+  }
+  return end;
+}
+
+function renderSaleTimer() {
+  const el = document.getElementById('sale-timer');
+  if (!el) return;
+  const diff = Math.max(0, Math.floor((saleEndTime() - Date.now()) / 1000));
+  const h = Math.floor(diff / 3600);
+  const m = Math.floor((diff % 3600) / 60);
+  const s = diff % 60;
+  el.textContent = `${pad2(h)}:${pad2(m)}:${pad2(s)}`;
+  if (diff === 0) localStorage.removeItem('akriva_sale_end');
+}
+
+/* ---------- Activity ticker ---------- */
+const tickerNames = ['Priya', 'Ananya', 'Riya', 'Sneha', 'Meera', 'Kavya', 'Ishita', 'Divya', 'Nikhil', 'Aarav'];
+const tickerCities = ['Delhi', 'Mumbai', 'Bengaluru', 'Pune', 'Kolkata', 'Hyderabad', 'Jaipur', 'Chennai'];
+let tickerIndex = 0;
+
+function tickerMessage(product) {
+  const name = tickerNames[Math.floor(Math.random() * tickerNames.length)];
+  const city = tickerCities[Math.floor(Math.random() * tickerCities.length)];
+  const mins = 1 + Math.floor(Math.random() * 58);
+  return `${name} from ${city} just picked ${product.name} · ${mins} min ago`;
+}
+
+function startTicker() {
+  const el = document.getElementById('ticker-text');
+  if (!el) return;
+  const pool = products.filter(p => p.badge).length ? products.filter(p => p.badge) : products;
+  const swap = () => {
+    el.textContent = tickerMessage(pool[tickerIndex++ % pool.length]);
+    el.style.transition = 'opacity 0.25s ease';
+    el.style.opacity = 1;
+  };
+  el.style.opacity = 0;
+  setTimeout(swap, 250);
+  setInterval(() => {
+    el.style.opacity = 0;
+    setTimeout(swap, 250);
+  }, 6000);
+}
+
+/* ---------- Share look ---------- */
+function shareText() {
+  const saved = products.filter(p => savedProducts.has(p.id));
+  const names = saved.length ? saved.slice(0, 5).map(p => p.name).join(', ') : 'Akriva picks';
+  return `My Akriva edit 💜 ${names}${saved.length > 5 ? ' & more' : ''} — shop at https://akriva787.github.io/akrivabeautyandfashion/`;
+}
+
+function shareLook(extra = '') {
+  const text = extra ? `${extra}\n\n${shareText()}` : shareText();
+  if (navigator.share) {
+    navigator.share({ title: 'Akriva edit', text }).catch(() => {});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => toast('Share text copied to clipboard')).catch(() => toast('Share text ready — copy it below?'));
+  } else {
+    toast('Share: select & copy the wishlist link');
+  }
+}
+
 document.addEventListener('click', event => {
   if (event.target.closest('#chatBubble')) { openSupportDrawer(); return; }
 
@@ -1078,6 +1152,12 @@ document.addEventListener('click', event => {
   if (event.target.closest('[data-filter-apply]')) { applyFilters(); return; }
   if (event.target.id === 'filter-modal') { closeFilterModal(); return; }
 
+  if (event.target.closest('[data-wish-share]')) { shareLook(); return; }
+  if (event.target.closest('#modal-share')) {
+    shareLook(selectedProduct ? `Just saved ${selectedProduct.name} (${money(selectedProduct.price)}) — my Akriva pick` : '');
+    return;
+  }
+
   const action = event.target.closest('[data-action]')?.dataset.action;
   if (!action) return;
   if (action === 'close') {
@@ -1221,3 +1301,6 @@ document.addEventListener('keydown', event => {
 renderHome();
 updateCart();
 renderLocationLabel();
+renderSaleTimer();
+setInterval(renderSaleTimer, 1000);
+startTicker();

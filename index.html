@@ -46,8 +46,35 @@
         <span>Best sellers</span>
       </div>
 
+      <!-- Akriva Mood Hero -->
+      <div class="hero mood-soft-hero" id="hero">
+        <div class="hero-copy">
+          <p class="eyebrow" id="hero-eyebrow">Akriva Atelier · Soft Romance</p>
+          <h1 id="hero-title">Wear your <em>softest</em> story</h1>
+          <button class="light-button" type="button" data-action="all">Explore the edit <span>→</span></button>
+        </div>
+        <div class="hero-image"></div>
+        <div class="hero-orb orb-one"></div>
+        <div class="hero-orb orb-two"></div>
+      </div>
+
+      <div class="atelier">
+        <div class="atelier-title">
+          <span class="atelier-mark">✦</span>
+          <div><p>AKRIVA ATELIER</p><h2>Pick your mood edit</h2></div>
+          <span class="atelier-arrow">›</span>
+        </div>
+        <div class="mood-row">
+          <button class="mood-card selected mood-soft" type="button" data-mood="soft" data-label="Akriva Atelier · Soft Romance" data-copy="Wear your <em>softest</em> story"><span>✦</span><b>Soft Romance</b></button>
+          <button class="mood-card mood-glow" type="button" data-mood="glow" data-label="Akriva Atelier · Golden Hour" data-copy="Glow like it's <em>golden hour</em>"><span>✦</span><b>Golden Hour</b></button>
+          <button class="mood-card mood-bold" type="button" data-mood="bold" data-label="Akriva Atelier · Bold Muse" data-copy="Own the night in <em>bold</em> hues"><span>✦</span><b>Bold Muse</b></button>
+        </div>
+      </div>
+
+      <div class="activity-ticker" id="activity-ticker"><span class="ticker-icon">🔥</span><span class="ticker-text" id="ticker-text"></span></div>
+
       <section class="amz-section">
-        <div class="amz-sec-head"><h2>Deals of the Day</h2><button type="button" data-action="all">See all ›</button></div>
+        <div class="amz-sec-head"><h2>Deals of the Day <span class="sale-timer" id="sale-timer">05:30:00</span></h2><button type="button" data-action="all">See all ›</button></div>
         <div class="amz-scroll" id="deal-slider"></div>
       </section>
 
@@ -302,10 +329,12 @@
           <p class="modal-price" id="modal-price"></p>
           <p class="modal-description">Crafted for comfort and styled to impress — this Akriva piece is your effortless everyday statement.</p>
           <p class="modal-delivery">FREE Delivery over ₹999 — arrives in 4–5 days · <b>COD available</b></p>
+          <p class="modal-bought" id="modal-bought">🔥 People are loving this one today</p>
           <div class="sizes"><span>Select size</span><button type="button">S</button><button type="button" class="selected-size">M</button><button type="button">L</button><button type="button">XL</button></div>
           <div class="modal-actions">
             <button class="add-button" type="button" id="modal-add">Add to bag <span>+</span></button>
             <button class="buy-button" type="button" id="modal-buy">Buy now</button>
+            <button class="modal-share" type="button" id="modal-share" aria-label="Share this look"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4.5M8.6 13.5l6.8 4.5"/></svg></button>
           </div>
         </div>
       </div>
