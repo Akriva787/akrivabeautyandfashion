@@ -131,8 +131,61 @@
         <div><small>SHOP AKRIVA</small><h2 id="catalog-title">All collections</h2></div>
       </header>
       <div class="filter-row" id="filters"></div>
+      <div class="catalog-toolbar">
+        <button class="filter-btn" type="button" data-filter-open aria-label="Open filters"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filters<span class="filter-count hidden" id="filter-count"></span></button>
+        <div class="sort-wrap">
+          <label for="sort-select">Sort by</label>
+          <select id="sort-select" aria-label="Sort products">
+            <option value="relevance">Relevance</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="savings">Biggest Savings</option>
+            <option value="rating">Customer Rating</option>
+          </select>
+        </div>
+      </div>
+      <p class="catalog-count" id="catalog-count"></p>
       <div class="catalog-grid" id="catalog-products"></div>
     </main>
+
+    <!-- FILTER SHEET -->
+    <div class="overlay hidden" id="filter-modal" role="dialog" aria-modal="true">
+      <div class="filter-sheet">
+        <div class="filter-head">
+          <h3>Filters</h3>
+          <button type="button" data-filter-clear aria-label="Clear all filters">Clear all</button>
+          <button class="modal-close" type="button" data-filter-close aria-label="Close">×</button>
+        </div>
+        <div class="filter-sec">
+          <h4>Price</h4>
+          <div class="filter-opts">
+            <label><input type="radio" name="f-price" value="any" checked><span>Any price</span></label>
+            <label><input type="radio" name="f-price" value="0-999"><span>Under ₹1,000</span></label>
+            <label><input type="radio" name="f-price" value="1000-1999"><span>₹1,000 – ₹1,999</span></label>
+            <label><input type="radio" name="f-price" value="2000-2999"><span>₹2,000 – ₹2,999</span></label>
+            <label><input type="radio" name="f-price" value="3000+"><span>₹3,000 & above</span></label>
+          </div>
+        </div>
+        <div class="filter-sec">
+          <h4>Discount</h4>
+          <div class="filter-opts">
+            <label><input type="radio" name="f-disc" value="0" checked><span>Any discount</span></label>
+            <label><input type="radio" name="f-disc" value="20"><span>20% & above</span></label>
+            <label><input type="radio" name="f-disc" value="30"><span>30% & above</span></label>
+            <label><input type="radio" name="f-disc" value="40"><span>40% & above</span></label>
+          </div>
+        </div>
+        <div class="filter-sec">
+          <h4>Customer rating</h4>
+          <div class="filter-opts">
+            <label><input type="radio" name="f-rating" value="0" checked><span>Any rating</span></label>
+            <label><input type="radio" name="f-rating" value="4"><span>4★ & above</span></label>
+            <label><input type="radio" name="f-rating" value="4.5"><span>4.5★ & above</span></label>
+          </div>
+        </div>
+        <button class="checkout" type="button" data-filter-apply>Apply filters</button>
+      </div>
+    </div>
 
     <!-- SEARCH -->
     <main class="screen hidden" id="search-screen">

@@ -215,11 +215,78 @@ function renderHome() {
   document.getElementById('products').innerHTML = [5, 3, 7, 8].map(id => products.find(p => p.id === id)).map(productCard).join('');
 }
 
+const filterState = { price: 'any', disc: 0, rating: 0 };
+
+function getCatalogProducts() {
+  const price = filterState.price;
+  const [pMin, pMax] = price === 'any' ? [null, null] : price === '3000+' ? [3000, null] : price.split('-').map(Number);
+  let list = products.filter(p => activeCategory === 'All' || p.category === activeCategory);
+  if (pMin !== null) list = list.filter(p => p.price >= pMin && (pMax === null || p.price <= pMax));
+  if (filterState.disc) list = list.filter(p => pctOff(p.old, p.price) >= filterState.disc);
+  if (filterState.rating) list = list.filter(p => (ratings[p.id]?.v || 4) >= filterState.rating);
+  const s = document.getElementById('sort-select')?.value || 'relevance';
+  if (s === 'price-asc') list = [...list].sort((a, b) => a.price - b.price);
+  else if (s === 'price-desc') list = [...list].sort((a, b) => b.price - a.price);
+  else if (s === 'savings') list = [...list].sort((a, b) => pctOff(b.old, b.price) - pctOff(a.old, a.price));
+  else if (s === 'rating') list = [...list].sort((a, b) => (ratings[b.id]?.v || 4) - (ratings[a.id]?.v || 4));
+  return list;
+}
+
+function filterActiveCount() {
+  return (filterState.price !== 'any' ? 1 : 0) + (filterState.disc ? 1 : 0) + (filterState.rating ? 1 : 0);
+}
+
+function syncFilterBadge() {
+  const fc = document.getElementById('filter-count');
+  if (!fc) return;
+  const n = filterActiveCount();
+  if (n) { fc.textContent = n; fc.classList.remove('hidden'); }
+  else fc.classList.add('hidden');
+}
+
+function openFilterModal() {
+  document.querySelector(`input[name="f-price"][value="${filterState.price}"]`).checked = true;
+  document.querySelector(`input[name="f-disc"][value="${filterState.disc}"]`).checked = true;
+  document.querySelector(`input[name="f-rating"][value="${filterState.rating}"]`).checked = true;
+  document.getElementById('filter-modal').classList.remove('hidden');
+}
+
+function closeFilterModal() {
+  document.getElementById('filter-modal').classList.add('hidden');
+}
+
+function readFilterInputs() {
+  const v = name => document.querySelector(`input[name="${name}"]:checked`)?.value || 'any';
+  filterState.price = v('f-price');
+  filterState.disc = Number(v('f-disc'));
+  filterState.rating = Number(v('f-rating'));
+}
+
+function applyFilters() {
+  readFilterInputs();
+  closeFilterModal();
+  syncFilterBadge();
+  renderCatalog();
+}
+
+function resetFilters() {
+  filterState.price = 'any';
+  filterState.disc = 0;
+  filterState.rating = 0;
+  document.querySelector('input[name="f-price"][value="any"]').checked = true;
+  document.querySelector('input[name="f-disc"][value="0"]').checked = true;
+  document.querySelector('input[name="f-rating"][value="0"]').checked = true;
+  syncFilterBadge();
+  renderCatalog();
+}
+
 function renderCatalog() {
-  const display = activeCategory === 'All' ? products : products.filter(p => p.category === activeCategory);
+  const display = getCatalogProducts();
   document.getElementById('catalog-title').textContent = activeCategory === 'All' ? 'All collections' : (activeCategory.endsWith('s') ? `${activeCategory}' collection` : `${activeCategory}'s collection`);
   document.getElementById('filters').innerHTML = ['All', 'Women', 'Men', 'Girls', 'Boys', 'Beauty'].map(c => `<button class="filter ${c === activeCategory ? 'selected' : ''}" data-filter="${c}">${c}</button>`).join('');
-  document.getElementById('catalog-products').innerHTML = display.length ? display.map(productCard).join('') : emptyState('No pieces found', 'Try another collection.');
+  syncFilterBadge();
+  document.getElementById('catalog-count').textContent = `${display.length} ${display.length === 1 ? 'piece' : 'pieces'}`;
+  document.getElementById('catalog-products').innerHTML = display.length ? display.map(productCard).join('') : emptyState('No pieces found', 'Try clearing filters to see everything.');
 }
 
 function renderExplore() {
@@ -1005,6 +1072,12 @@ document.addEventListener('click', event => {
     return;
   }
 
+  if (event.target.closest('[data-filter-open]')) { openFilterModal(); return; }
+  if (event.target.closest('[data-filter-close]')) { closeFilterModal(); return; }
+  if (event.target.closest('[data-filter-clear]')) { resetFilters(); renderCatalog(); return; }
+  if (event.target.closest('[data-filter-apply]')) { applyFilters(); return; }
+  if (event.target.id === 'filter-modal') { closeFilterModal(); return; }
+
   const action = event.target.closest('[data-action]')?.dataset.action;
   if (!action) return;
   if (action === 'close') {
@@ -1095,7 +1168,10 @@ document.getElementById('home-search-clear').addEventListener('click', () => {
   homeSearchInput.value = '';
   renderHomeSearch('');
   homeSearchInput.focus();
+  setHomeSearchMode(true);
 });
+
+document.getElementById('sort-select').addEventListener('change', () => renderCatalog());
 document.addEventListener('click', event => {
   const term = event.target.closest('[data-home-search-term]')?.dataset.homeSearchTerm;
   if (!term) return;
