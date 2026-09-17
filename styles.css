@@ -867,6 +867,20 @@ button { cursor: pointer; touch-action: manipulation; }
 .nav-item span svg { width: 22px; height: 22px; }
 .nav-item.selected { color: var(--plum); font-weight: 700; }
 
+.nav-item[data-action="home"] span svg { color: #7a1f45; }
+.nav-item[data-action="explore"] span svg { color: #2563eb; }
+.nav-item[data-action="search"] span svg { color: #ea7a2b; }
+.nav-item[data-action="wishlist"] span svg { color: #e0245e; }
+.nav-item[data-action="profile"] span svg { color: #0d9488; }
+.nav-item[data-action="wishlist"].selected span svg { fill: #e0245e; }
+
+.nav-item.selected span {
+  background: rgba(122, 31, 69, 0.12);
+  border-radius: 12px;
+  padding: 2px 9px;
+  margin: -2px 0;
+}
+
 /* ---------- Product modal ---------- */
 .overlay {
   background: rgba(39, 14, 28, .47);
@@ -2393,3 +2407,6 @@ button { cursor: pointer; touch-action: manipulation; }
 .amz-search-icon svg { width: 17px; height: 17px; }
 .search-field span svg { display: block; }
 .wishlist-intro span svg { display: block; }
+
+.amz-strip .amz-bag { color: #f7c64f; }
+.bag-button { color: #c2185b; }
