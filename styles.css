@@ -2662,3 +2662,78 @@ html { scroll-behavior: smooth; }
 }
 .wishlist-tools button[data-wish-share]:active { transform: scale(0.97); }
 .wishlist-tools button[data-wish-all] { margin-right: 0; }
+
+/* ---------- Desktop / large screen ---------- */
+@media (min-width: 920px) {
+  .app-shell {
+    max-width: 1180px;
+    box-shadow: 0 34px 90px -42px rgba(59, 10, 36, 0.45);
+    border-left: 1px solid #efe0e3;
+    border-right: 1px solid #efe0e3;
+    padding-bottom: 140px;
+  }
+
+  .screen { padding: 30px 34px 40px; }
+
+  .amz-strip { padding: 16px 34px 16px; }
+  .amz-strip-top { max-width: 1120px; margin: 0 auto; width: 100%; }
+  .amz-search { max-width: 680px; margin: 0 auto; width: 100%; }
+
+  .amz-sublinks { max-width: 1120px; margin: 0 auto; padding: 12px 0 13px; }
+
+  /* Floating pill bottom nav */
+  .bottom-nav {
+    bottom: 26px;
+    width: auto;
+    border: 1px solid #eee1e3;
+    border-radius: 999px;
+    box-shadow: 0 18px 44px -16px rgba(59, 10, 36, 0.45);
+    padding: 10px 14px;
+    gap: 10px;
+  }
+  .nav-item { min-width: 78px; font-size: 10px; }
+
+  /* Hero */
+  .hero { height: 330px; border-radius: 28px; }
+  .hero-copy { padding: 58px 0 0 48px; max-width: 58%; }
+  .eyebrow { font-size: 11px; letter-spacing: 2px; }
+  .hero h1 { font-size: 50px; letter-spacing: -2.2px; }
+  .light-button { margin-top: 28px; padding: 14px 20px; font-size: 12px; }
+  .hero-image { width: 50%; background-position: 62% center; }
+
+  .mood-row { max-width: 480px; }
+
+  /* Grids */
+  .products,
+  .catalog-grid,
+  .amz-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px 16px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .amz-cats { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; padding-left: 0; padding-right: 0; }
+  .amz-scroll {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 16px;
+    overflow: visible;
+    padding: 2px 0 24px;
+  }
+  .amz-scroll .product-card { flex: none; }
+
+  .explore-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+    grid-auto-rows: 190px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .explore-card.tall { grid-row: span 2; }
+
+  .amz-sec-head { padding: 0; }
+
+  .amz-banner { margin: 6px 0 4px; padding: 20px 26px; border-radius: 20px; }
+  .amz-banner b { font-size: 19px; }
+  .amz-banner p { font-size: 12.5px; }
+}
