@@ -1317,6 +1317,9 @@ renderSaleTimer();
 setInterval(renderSaleTimer, 1000);
 startTicker();
 
+const mqTrack = document.getElementById('akriva-marquee-track');
+if (mqTrack) mqTrack.innerHTML += mqTrack.innerHTML;
+
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }

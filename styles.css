@@ -1873,7 +1873,8 @@ button { cursor: pointer; touch-action: manipulation; }
 #home-screen.searching .amz-banner,
 #home-screen.searching .hero,
 #home-screen.searching .atelier,
-#home-screen.searching .activity-ticker {
+#home-screen.searching .activity-ticker,
+#home-screen.searching .akriva-marquee {
   display: none;
 }
 
@@ -2721,3 +2722,24 @@ html { scroll-behavior: smooth; }
   /* Everything else keeps its mobile layout inside the phone frame */
   .screen { padding: 18px 16px 18px; }
 }
+
+/* ---------- Akriva live marquee strip ---------- */
+.akriva-marquee {
+  overflow: hidden;
+  background: linear-gradient(120deg, #f7c64f, #e6a63a 55%, #f2b14e);
+  color: #2a0a1a;
+  font: 700 11px 'Plus Jakarta Sans', sans-serif;
+  white-space: nowrap;
+  border-bottom: 1px solid rgba(42, 10, 26, 0.08);
+}
+.akriva-marquee-track {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  padding: 7px 0;
+  animation: akriva-scroll 26s linear infinite;
+  will-change: transform;
+}
+.akriva-marquee-track b { font-weight: 800; }
+.akriva-marquee-track i { color: rgba(42, 10, 26, 0.45); font-style: normal; }
+@keyframes akriva-scroll { to { transform: translateX(-50%); } }
