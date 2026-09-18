@@ -342,6 +342,7 @@ function addItem(product) {
   else cart.push({ ...product, qty: 1 });
   updateCart();
   toast(`${product.name} added to your bag`);
+  pushTicker(`You added ${product.name} to your bag`);
 }
 
 function openProduct(id) {
@@ -353,7 +354,12 @@ function openProduct(id) {
   document.getElementById('modal-rating').innerHTML = `${starRating(selectedProduct.id)}<span class="modal-badge">${selectedProduct.badge ? `${selectedProduct.badge} · ` : ''}Akriva choice</span>`;
   document.getElementById('modal-price').innerHTML = `${money(selectedProduct.price)}${selectedProduct.old ? ` <del>${money(selectedProduct.old)}</del>` : ''}${selectedProduct.old ? ` <span class="pc-off">${pctOff(selectedProduct.old, selectedProduct.price)}% off</span>` : ''}`;
   const bought = document.getElementById('modal-bought');
-  if (bought) bought.textContent = `🔥 ${2 + (selectedProduct.id * 3) % 9} people bought this today`;
+  if (bought) {
+    const bagItem = cart.find(c => c.id === selectedProduct.id);
+    const inBag = bagItem ? bagItem.qty : 0;
+    const savedNow = savedProducts.has(selectedProduct.id);
+    bought.textContent = inBag ? `✓ In your bag · qty ${inBag}` : savedNow ? '♥ Saved in your Akriva edit' : 'Akriva choice — loved for its drapes & fits';
+  }
   document.getElementById('product-modal').classList.remove('hidden');
 }
 
@@ -772,6 +778,7 @@ function placeOrder() {
   const orders = store.get(DB_ORDERS, []);
   orders.unshift(order);
   store.set(DB_ORDERS, orders);
+  pushTicker(`Order ${orderId} confirmed — your edit is on the way 🎉`);
 
   const addresses = store.get(DB_ADDRESSES, []);
   const a = checkout.address;
@@ -813,33 +820,34 @@ function renderSaleTimer() {
   if (diff === 0) localStorage.removeItem('akriva_sale_end');
 }
 
-/* ---------- Activity ticker ---------- */
-const tickerNames = ['Priya', 'Ananya', 'Riya', 'Sneha', 'Meera', 'Kavya', 'Ishita', 'Divya', 'Nikhil', 'Aarav'];
-const tickerCities = ['Delhi', 'Mumbai', 'Bengaluru', 'Pune', 'Kolkata', 'Hyderabad', 'Jaipur', 'Chennai'];
-let tickerIndex = 0;
-
-function tickerMessage(product) {
-  const name = tickerNames[Math.floor(Math.random() * tickerNames.length)];
-  const city = tickerCities[Math.floor(Math.random() * tickerCities.length)];
-  const mins = 1 + Math.floor(Math.random() * 58);
-  return `${name} from ${city} just picked ${product.name} · ${mins} min ago`;
-}
+/* ---------- Activity ticker (real visitor events only) ---------- */
+const tickerEvents = [];
+const tickerHints = [
+  'Welcome to Akriva — your picks, your edit ✨',
+  'Save what you love, buy only what you keep',
+  'Tap the heart on any piece to save it',
+];
+let tickerI = 0;
 
 function startTicker() {
   const el = document.getElementById('ticker-text');
   if (!el) return;
-  const pool = products.filter(p => p.badge).length ? products.filter(p => p.badge) : products;
   const swap = () => {
-    el.textContent = tickerMessage(pool[tickerIndex++ % pool.length]);
+    const msg = tickerEvents.length ? tickerEvents.shift() : tickerHints[tickerI++ % tickerHints.length];
+    el.textContent = msg;
     el.style.transition = 'opacity 0.25s ease';
-    el.style.opacity = 1;
-  };
-  el.style.opacity = 0;
-  setTimeout(swap, 250);
-  setInterval(() => {
     el.style.opacity = 0;
-    setTimeout(swap, 250);
-  }, 6000);
+    setTimeout(() => {
+      el.textContent = msg;
+      el.style.opacity = 1;
+    }, 250);
+  };
+  swap();
+  setInterval(swap, 6000);
+}
+
+function pushTicker(message) {
+  tickerEvents.push(message);
 }
 
 /* ---------- Share look ---------- */
@@ -911,12 +919,16 @@ document.addEventListener('click', event => {
     event.stopPropagation();
     const card = heart.closest('[data-product]');
     const id = Number(card.dataset.product);
+    const product = products.find(x => x.id === id);
+    const name = product ? product.name : 'a piece';
     if (savedProducts.has(id)) {
       savedProducts.delete(id);
       toast('Removed from your saved loves');
+      pushTicker(`You removed ${name} from your wishlist`);
     } else {
       savedProducts.add(id);
       toast('Saved to your Akriva edit ♡');
+      pushTicker(`You saved ${name} to your wishlist`);
     }
     syncSavedButtons();
     const wishlistScreen = document.getElementById('wishlist-screen');
