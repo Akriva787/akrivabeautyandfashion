@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://akriva787.github.io/akrivabeautyandfashion/sitemap.xml
